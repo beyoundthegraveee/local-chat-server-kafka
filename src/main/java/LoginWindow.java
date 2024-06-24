@@ -3,6 +3,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class LoginWindow extends JFrame {
     private JPanel loginPanel;
@@ -34,8 +35,10 @@ public class LoginWindow extends JFrame {
                 String name = loginField.getText().trim();
                 if (!name.isEmpty()) {
                     new Chat(name, "test");
-                    MessageProducer.send(new ProducerRecord<>(topic, "User: " + name + ", logged in at: "+
-                            LocalDateTime.now()));
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                    String formattedDate = LocalDateTime.now().format(formatter);
+                    MessageProducer.send(new ProducerRecord<>(topic, "USER: " + name + ", logged in at: "+
+                            formattedDate));
                     dispose();
                 } else {
                     JOptionPane.showMessageDialog(LoginWindow.this, "You need to enter a name.");
